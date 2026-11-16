@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bounty Radar — every free bounty, one ranked board</title>
+<meta name="description" content="Free bounties for zero-capital hunters: make.fun, Immunefi, HackenProof and Devpost hackathons, ranked 0-100 with fee, payout and KYC facts up front.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+  <h1>🎯 Bounty Radar</h1>
+  <p class="tagline">Every free bounty worth a zero-capital hunter's time — ranked, with the fee, payout and KYC facts up front.</p>
+  <div id="stats" class="stats" aria-live="polite"></div>
+</header>
+
+<section id="filters" class="filters">
+  <div class="chips" id="verdict-chips" role="group" aria-label="Filter by verdict">
+    <button data-verdict="ALL" class="chip active">All</button>
+    <button data-verdict="GO" class="chip">GO</button>
+    <button data-verdict="LOTTERY" class="chip">LOTTERY</button>
+    <button data-verdict="NO-GO" class="chip">NO-GO</button>
+  </div>
+  <label>Source
+    <select id="source-filter">
+      <option value="ALL">All sources</option>
+      <option value="make.fun">make.fun</option>
+      <option value="immunefi">Immunefi</option>
+      <option value="hackenproof">HackenProof</option>
+      <option value="devpost">Devpost</option>
+      <option value="testnet">Testnet</option>
+    </select>
+  </label>
+  <label>Search <input id="search" type="search" placeholder="name or keyword…"></label>
+  <label>Sort
+    <select id="sort">
+      <option value="score">Score (high → low)</option>
+      <option value="deadline">Deadline (soonest)</option>
+      <option value="prize">Prize (high → low)</option>
+    </select>
+  </label>
+</section>
+
+<p id="live-note" class="live-note" aria-live="polite"></p>
+<main id="board" class="board" aria-live="polite"></main>
+
+<footer>
+  <p id="provenance"></p>
+  <p>Scores are a screening heuristic from the squad's own framework — not a guarantee of payout. "Free" means $0 to enter. Always read the official rules before you submit. Not financial advice.</p>
+  <p>Built for Kiroween 2026 (AWS / Devpost) with Kiro. Public repo link added at publish time.</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

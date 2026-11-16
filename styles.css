@@ -1,0 +1,59 @@
+:root {
+  --bg: #0d1117; --panel: #161b22; --line: #30363d;
+  --text: #e6edf3; --muted: #8b949e;
+  --go: #3fb950; --lottery: #d29922; --nogo: #f85149; --live: #58a6ff;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text);
+  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+header, .filters, main, footer { max-width: 1080px; margin: 0 auto; padding: 16px; }
+h1 { margin: 8px 0 4px; font-size: 2rem; }
+.tagline { color: var(--muted); margin: 0 0 12px; }
+.stats { display: flex; flex-wrap: wrap; gap: 10px; }
+.stat { background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+  padding: 8px 14px; font-size: 0.95rem; }
+.stat b { font-size: 1.2rem; }
+.filters { display: flex; flex-wrap: wrap; gap: 12px; align-items: end;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 10px; margin-top: 8px; padding: 12px; }
+.filters label { display: flex; flex-direction: column; gap: 4px; font-size: 0.85rem; color: var(--muted); }
+select, input[type="search"] { background: var(--bg); color: var(--text);
+  border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; font-size: 0.95rem; }
+.chips { display: flex; gap: 6px; }
+.chip { background: var(--bg); color: var(--text); border: 1px solid var(--line);
+  border-radius: 999px; padding: 6px 14px; cursor: pointer; font-size: 0.95rem; }
+.chip.active { background: var(--live); border-color: var(--live); color: #fff; }
+.live-note { color: var(--muted); font-size: 0.9rem; }
+.board { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+  padding: 14px; cursor: pointer; }
+.card h2 { margin: 0 0 6px; font-size: 1.1rem; }
+.badges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+.badge { font-size: 0.75rem; font-weight: 700; border-radius: 4px; padding: 2px 7px; }
+.badge.GO { background: var(--go); color: #06210c; }
+.badge.LOTTERY { background: var(--lottery); color: #2b1d00; }
+.badge.NO-GO { background: var(--nogo); color: #fff; }
+.badge.source { background: var(--bg); border: 1px solid var(--line); color: var(--muted); }
+.badge.live { background: var(--live); color: #fff; }
+.scorebar { height: 8px; background: var(--bg); border-radius: 4px; overflow: hidden; margin: 4px 0 10px; }
+.scorebar > div { height: 100%; }
+.scorebar > div.GO { background: var(--go); }
+.scorebar > div.LOTTERY { background: var(--lottery); }
+.scorebar > div.NO-GO { background: var(--nogo); }
+.meta { font-size: 0.9rem; color: var(--muted); margin: 2px 0; }
+.meta b { color: var(--text); font-weight: 600; }
+.why { margin: 8px 0; font-size: 0.95rem; }
+.card a { color: var(--live); }
+.detail { margin-top: 10px; border-top: 1px solid var(--line); padding-top: 10px; font-size: 0.9rem; }
+.subscore { display: grid; grid-template-columns: 90px 1fr 30px; gap: 8px; align-items: center; margin: 3px 0; }
+.subscore .bar { height: 6px; background: var(--bg); border-radius: 3px; overflow: hidden; }
+.subscore .bar > div { height: 100%; background: var(--live); }
+.empty { color: var(--muted); text-align: center; padding: 40px 0; grid-column: 1 / -1; }
+footer { color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--line); margin-top: 24px; }
+footer a { color: var(--live); }
+@media (max-width: 640px) { 
+  .board { grid-template-columns: 1fr; } 
+  .filters { padding: 12px 8px; gap: 10px; }
+  .filters label { flex: 1 1 auto; min-width: 120px; }
+  .chip { padding: 8px 12px; }
+  select, input[type="search"] { min-width: 0; width: 100%; }
+}
