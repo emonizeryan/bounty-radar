@@ -115,8 +115,38 @@ function cardHtml(b) {
     <p class="meta">Deadline: <b>${esc(fmtDeadline(b.deadline))}</b>${b.deadline ? ` · <b>${esc(fmtCountdown(b.deadline))}</b>` : ""}</p>
     <p class="why">${esc(b.why)}</p>
     <a href="${esc(b.url)}" target="_blank" rel="noopener">Official page ↗</a>
+    <button class="ai-btn" data-ai="${esc(b.id)}" type="button">✨ Ask AI — is it worth it?</button>
+    <p class="ai-out" hidden></p>
     <div class="detail" hidden>${subscoreRows(b)}</div>
   </article>`;
+}
+
+/* SLAY HACKS 2026 adaptation: per-card AI explainer via the free public
+   Pollinations text API (no key). Fails gracefully — the board never breaks.
+   The 0–100 score stays a deterministic heuristic; only this text is AI. */
+const AI_FAIL = "AI explainer unavailable right now — the score breakdown below is still accurate.";
+
+async function askAI(b, btn, out) {
+  btn.disabled = true;
+  btn.textContent = "Thinking…";
+  out.hidden = false;
+  out.textContent = "Asking the AI…";
+  const prompt = `In 2 short sentences, explain why this bounty is or isn't worth a zero-capital hunter's time: ${b.name}, score ${b.score}/100 (${b.verdict}), prize ${b.prize}, fee ${b.fee}, KYC ${b.kyc}, deadline ${fmtDeadline(b.deadline)}.`;
+  try {
+    const ctl = new AbortController();
+    const timer = setTimeout(() => ctl.abort(), 20000);
+    const res = await fetch("https://text.pollinations.ai/" + encodeURIComponent(prompt), { signal: ctl.signal });
+    clearTimeout(timer);
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const text = (await res.text()).trim();
+    if (!text) throw new Error("empty reply");
+    out.innerHTML = `<span class="ai-label">AI-generated explanation (Pollinations, free public API) — may be inaccurate:</span> ${esc(text)}`;
+  } catch (e) {
+    out.textContent = AI_FAIL;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "✨ Ask AI — is it worth it?";
+  }
 }
 
 function render() {
@@ -152,6 +182,13 @@ function bind() {
   document.getElementById("search").addEventListener("input", e => { state.query = e.target.value; render(); });
   document.getElementById("sort").addEventListener("change", e => { state.sort = e.target.value; render(); });
   document.getElementById("board").addEventListener("click", e => {
+    const aiBtn = e.target.closest(".ai-btn");
+    if (aiBtn) {
+      const card = aiBtn.closest(".card");
+      const b = state.bounties.find(x => x.id === aiBtn.dataset.ai);
+      if (b && card) askAI(b, aiBtn, card.querySelector(".ai-out"));
+      return;
+    }
     const card = e.target.closest(".card");
     if (!card || e.target.closest("a")) return;
     const detail = card.querySelector(".detail");
@@ -162,6 +199,7 @@ function bind() {
   });
   document.getElementById("board").addEventListener("keydown", e => {
     if (e.key !== "Enter" && e.key !== " ") return;
+    if (e.target.closest("button, a")) return; // buttons/links handle their own keys
     const card = e.target.closest(".card");
     if (!card) return;
     e.preventDefault();
